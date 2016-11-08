@@ -55,6 +55,7 @@ bool solveSingleCircle(std::vector<Node*> *beenHere, Node *currentNode, Node *en
     for (int i = 0; i < currentNode->getPathsSize(); i++) {
         if(solveSingleCircle(beenHere, currentNode->getPathAtIndex(i), endingNode)){
             std::cout << currentNode->getIndex() << ", ";
+            successfulSolve = true;
             break;
         }
     }
@@ -83,7 +84,10 @@ int main(int argc, const char * argv[]) {
     displayNodes(nodes);
     
     if (!solveSingleCircle(&beenHere, startingNode, endingNode)) {
-        std::cout << std::endl << "On an island" << std::endl;
+        std::cout << std::endl << "No path - on an island" << std::endl;
+    }
+    else {
+        std::cout << std::endl << "Found a path, listed above" << std::endl;
     }
     
 //    for (int i = 0; i < beenHere.size(); i++){
