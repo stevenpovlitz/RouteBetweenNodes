@@ -22,6 +22,9 @@ public:
     }
     
     bool pushNodePointer(Node * newNode) {
+        if (newNode == this)
+            return false;
+        
         for (int i = 0; i < paths.size(); i++){
             if (newNode == paths[i])
                 return false;

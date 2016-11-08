@@ -36,16 +36,59 @@ void displayNodes(std::vector<Node> &path) {
     std::cout << std::endl;
 }
 
-int main(int argc, const char * argv[]) {
-    int vecsize = 10;
-    std::vector<Node> nodes;
-    for (int i = 0; i < vecsize; i++){
-        nodes.push_back(Node(i));
+// returns false if either node is stuck on an "island"
+bool solveSingleCircle(std::vector<Node*> *beenHere, Node *currentNode, Node *startingNode, Node *endingNode){
+    bool successfulSolve = false;
+    beenHere->push_back(currentNode);
+    
+    if (currentNode == endingNode) {
+        std::cout << currentNode->getIndex() << ", ";
+        return true;
     }
     
+    for (int i = 0; i < beenHere->size(); i++) {
+        if (currentNode == beenHere->at(i)){
+            return false;
+        }
+    }
+    
+    for (int i = 0; i < currentNode->getPathsSize(); i++) {
+        if(solveSingleCircle(beenHere, currentNode->getPathAtIndex(i), startingNode, endingNode)){
+            std::cout << currentNode->getIndex() << ", ";
+        }
+    }
+    
+    return successfulSolve;
+}
+
+int main(int argc, const char * argv[]) {
+    int vecsize = 5;
+    std::vector<Node> nodes;
+    for (int i = 0; i < vecsize; i++)
+        nodes.push_back(Node(i));
     setup_nodes(nodes);
+    std::vector<Node*> beenHere;
+    
+    // chose a start and an end node
+    Node *startingNode = &nodes[rand() % nodes.size()];
+    Node *endingNode = &nodes[rand() % nodes.size()];
+    
+    while (startingNode == endingNode){
+        endingNode = &nodes[rand() % nodes.size()];
+    }
+
+    std::cout << "starting index is: " << startingNode->getIndex() << ". Ending index is: " << endingNode->getIndex() << std::endl;
     
     displayNodes(nodes);
+    
+    if (!solveSingleCircle(&beenHere, &nodes[0], startingNode, endingNode)) {
+        //std::cout << "On an island" << std::endl;
+    }
+    
+    for (int i = 0; i < beenHere.size(); i++){
+        std::cout << beenHere[i]->getIndex() << ", ";
+    }
+    
 
     return 0;
 }
