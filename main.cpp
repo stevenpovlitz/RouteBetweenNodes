@@ -18,20 +18,22 @@ void setup_nodes(std::vector<Node> &path){
     for (int i = 0; i < path.size() * 2; i++) {
         int startIndex = rand() % path.size();
         int endIndex = rand() % path.size();
-        
-        path[startIndex].pushNodePointer(&path[endIndex]);
+        if (!path[startIndex].pushNodePointer(&path[endIndex]))
+            i--; // means we tried to push a pointer twice onto the same node, redo the loop run
     }
     
 }
 
-void testSystem(std::vector<Node> &path) {
+void displayNodes(std::vector<Node> &path) {
     for (int i = 0; i < path.size(); i++){
         std::cout << "Node " << i << "\nPoints to: " << std::endl;
         for (int j = 0; j < path[i].getPathsSize(); j++){
-            std::cout << path[i].getPathAtIndex(j)
+            std::cout << path[i].getPathAtIndex(j)->getIndex() << ", ";
         }
+        std::cout << std::endl << std::endl;
         
     }
+    std::cout << std::endl;
 }
 
 int main(int argc, const char * argv[]) {
@@ -41,10 +43,9 @@ int main(int argc, const char * argv[]) {
         nodes.push_back(Node(i));
     }
     
-    
-    
     setup_nodes(nodes);
     
-    std::cout << "Hello, World!\n";
+    displayNodes(nodes);
+
     return 0;
 }

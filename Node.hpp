@@ -21,10 +21,15 @@ public:
         this->index = index;
     }
     
-    void pushNodePointer(Node * newNode) {
+    bool pushNodePointer(Node * newNode) {
+        for (int i = 0; i < paths.size(); i++){
+            if (newNode == paths[i])
+                return false;
+        }
+        
         paths.push_back(newNode);
+        return true;
     }
-    
     int getPathsSize() {
         return int(paths.size());
     }
